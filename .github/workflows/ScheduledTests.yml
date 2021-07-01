@@ -55,7 +55,7 @@ jobs:
           name: target
           
       - name: Generate tag
-        run: echo ::set-output name=tag::$(date +'%Y_%m_%d.%H:%M:%S')
+        run: echo ::set-output name=tag::$(date +'%Y_%m_%d.%H_%M_%S')
         id: project
         
       - name: Login to DockerHub
