@@ -41,7 +41,7 @@ jobs:
         run: mvn -B package -DskipTests
         
       - name: Upload artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: target
           path: target
