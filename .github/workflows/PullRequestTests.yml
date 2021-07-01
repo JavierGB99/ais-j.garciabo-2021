@@ -1,0 +1,25 @@
+name: Pruebas_Unitarias_API_REST
+
+on:
+  pull_request:
+    types: [ opened ]
+    branches: [ master ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+ 
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      
+      - name: Test Unitario
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.unitary.*Test' test
+        
+      - name: Test Rest
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test
