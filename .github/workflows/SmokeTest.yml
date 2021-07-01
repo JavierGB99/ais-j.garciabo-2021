@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: target
-          path: target/*.jar
+          path: target
           retention-days: 1
           
   publish_in_heroku_registry:
