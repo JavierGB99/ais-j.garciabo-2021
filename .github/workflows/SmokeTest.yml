@@ -91,3 +91,7 @@ jobs:
         run: heroku container:login
       - name: Deploy to Heroku
         run: heroku container:release web
+      - name: Run REST test
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' -Dhost="$HEROKU_APP.herokuapp.com" test
+      - name: Run Selenium test
+        run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' -Dhost="$HEROKU_APP.herokuapp.com" test
