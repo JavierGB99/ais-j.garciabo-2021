@@ -20,7 +20,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import es.urjc.code.daw.library.Application;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SeleniumTest {
 
     @LocalServerPort
@@ -36,7 +36,6 @@ public class SeleniumTest {
 
 	@BeforeEach
 	public void setupTest() {
-        
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         this.driver = new ChromeDriver(options);
@@ -54,9 +53,18 @@ public class SeleniumTest {
     @DisplayName("Añadir un nuevo libro y comprobar que se ha creado")
 	public void createBookTest() throws Exception {
 
-        // GIVEN: Partiendo de que estamos en la página principal de la libreria
-        this.driver.get("http://localhost:"+this.port+"/");
 
+        String host = System.getProperty("host","localhost");
+
+
+
+        // GIVEN: Partiendo de que estamos en la página principal de la libreria
+        if(host.equals("localhost")){
+            this.driver.get("http://localhost:"+this.port+"/");
+        }else{
+            this.driver.get("http://"+host+"/");
+        }
+        
         // WHEN: Creamos un nuevo libro
 
         String title = "FAKE BOOK";
@@ -74,8 +82,14 @@ public class SeleniumTest {
 	@DisplayName("Borrar un libro y comprobar que no existe")
 	public void deleteBookTest() throws Exception {
 
+        String host = System.getProperty("host","localhost");
+
         // GIVEN: Partiendo de que estamos en la página principal de la libreria
-        this.driver.get("http://localhost:"+this.port+"/");
+        if(host.equals("localhost")){
+            this.driver.get("http://localhost:"+this.port+"/");
+        }else{
+            this.driver.get("http://"+host+"/");
+        }
 
         // WHEN: 
         

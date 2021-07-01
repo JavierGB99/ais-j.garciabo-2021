@@ -17,7 +17,7 @@ import es.urjc.code.daw.library.book.Book;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DisplayName("REST tests")
 public class RestTest {
 
@@ -36,17 +36,25 @@ public class RestTest {
     @DisplayName("Añadir un nuevo libro y comprobar que se ha creado")
 	public void createBookTest() throws Exception {
 
+         String host = System.getProperty("host","localhost");
+
         // CREAMOS UN NUEVO LIBRO
 
 		Book book = new Book("FAKE BOOK","Contenido de prueba");
-    	
+    	String url;
+        if(host.equals("localhost")){
+            url = "/api/books/";
+        }else{
+            url = "https://"+host+"/api/books/";
+        }
+
         Book createdBook = 
             given()
                 .request()
                     .body(objectMapper.writeValueAsString(book))
                     .contentType(ContentType.JSON).
             when()
-                .post("/api/books/").
+                .post(url).
             then()
                 .assertThat()
                 .statusCode(201)
@@ -56,7 +64,7 @@ public class RestTest {
         // COMPROBAMOS QUE EL LIBRO SE HA CREADO CORRECTAMENTE
 
         when()
-            .get("/api/books/{id}", createdBook.getId())
+            .get(url+"{id}", createdBook.getId())
         .then()
              .assertThat()
              .statusCode(200)
@@ -69,17 +77,27 @@ public class RestTest {
 	@DisplayName("Borrar un libro y comprobar que se ha borrado")
 	public void deleteBookTest() throws Exception {
 
+         String host = System.getProperty("host","localhost");
+
         // CREAMOS UN NUEVO LIBRO
 
 		Book book = new Book("FAKE BOOK","Contenido de prueba");
     	
+        String url;
+        
+        if(host.equals("localhost")){
+            url = "/api/books/";
+        }else{
+            url = "https://"+host+"/api/books/";
+        }
+
         Book createdBook = 
             given()
                 .request()
                     .body(objectMapper.writeValueAsString(book))
                     .contentType(ContentType.JSON)
             .when()
-                .post("/api/books/")
+                .post(url)
             .then()
                 .assertThat()
                 .statusCode(201)
@@ -88,7 +106,7 @@ public class RestTest {
         
         // BORRAMOS EL LIBRO CREADO
         when()
-             .delete("/api/books/{id}",createdBook.getId())
+             .delete(url+"{id}",createdBook.getId())
         .then()
              .assertThat()
                 .statusCode(200);
@@ -96,7 +114,7 @@ public class RestTest {
         // COMPROBAMOS QUE EL LIBRO YA NO EXISTE
 
         when()
-             .get("/api/books/{id}", createdBook.getId())
+             .get(url+"{id}", createdBook.getId())
         .then()
              .assertThat()
                 .statusCode(404);
