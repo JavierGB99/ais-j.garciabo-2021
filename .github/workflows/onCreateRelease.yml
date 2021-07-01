@@ -1,9 +1,8 @@
 name: On creation of branch release
 
 on:
-  create:
-    branch: 
-      - 'release-*'
+  release:
+    types: [published]
 
 jobs:
   build:
