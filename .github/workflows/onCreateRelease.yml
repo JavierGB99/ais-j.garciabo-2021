@@ -1,10 +1,8 @@
 name: On creation of branch release
 
 on:
-  create:
-    branches: [ release-* ]
-
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
