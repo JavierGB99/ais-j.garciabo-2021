@@ -91,7 +91,21 @@ jobs:
         run: heroku container:login
       - name: Deploy to Heroku
         run: heroku container:release web
+        
+  smoke_test:
+    name: Smoke Tests
+    runs-on: ubuntu-20.04
+    needs: [deploy_to_heroku]
+    
+    env:
+      HEROKU_APP: ${{ secrets.HEROKU_APP }}
+    
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
       - name: Run REST test
         run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' -Dhost="$HEROKU_APP.herokuapp.com" test
       - name: Run Selenium test
         run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' -Dhost="$HEROKU_APP.herokuapp.com" test
+    
+    
