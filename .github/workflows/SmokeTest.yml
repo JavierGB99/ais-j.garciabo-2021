@@ -40,11 +40,12 @@ jobs:
       - name: Build native with Maven without Tests
         run: mvn -B package -DskipTests
         
-      - name: Upload jar for next job
+      - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
           name: target
-          path: target
+          path: target/*.jar
+          retention-days: 1
           
   publish_in_heroku_registry:
   
