@@ -5,7 +5,7 @@
 
 	<groupId>es.urjc.code</groupId>
 	<artifactId>practica_1_testing</artifactId>
-	<version>VERSION-1.0.0</version>
+	<version>VERSION-1.1.0</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
